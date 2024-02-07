@@ -38,6 +38,8 @@ const router = express.Router();
  *               example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwia
  */
 router.post("/", async(req: Request, res: Response) => {
+  console.log('post');
+
   const user = await User.findOne();
   res.status(200).json(user);
 });
