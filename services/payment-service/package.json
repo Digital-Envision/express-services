@@ -1,0 +1,19 @@
+{
+  "name": "payment-service",
+  "version": "1.0.0",
+  "description": "Payment Service Boilerplate",
+  "scripts": {
+    "test": "npm run test",
+    "migration:create": "npx sequelize-cli migration:create --name",
+    "migration:run": "npx sequelize-cli db:migrate"
+  },
+  "author": "Krisna Satria Wijayanto",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "sequelize": "^6.36.0",
+    "stripe": "^14.15.0"
+  }
+}
