@@ -12,10 +12,18 @@ export class PaymentRepository {
         this.sequelize = sequelize;
     }
 
+    async getPayments() {
+        try {
+            return this.models.Payments.findAll();
+        } catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
     async getPayment(id: string) {
         try {
             return this.models.Payments.findByPk(id);
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
         }
     }
@@ -23,10 +31,10 @@ export class PaymentRepository {
     async createPayment(payload: PaymentCreatePayload) {
         const transaction = await this.sequelize.transaction();
         try {
-            const payment = await this.models.Payments.create(payload, { transaction });
+            const payment = await this.models.Payments.create({ payload }, { transaction });
             await transaction.commit();
             return payment;
-        } catch (error) {
+        } catch (error: any) {
             await transaction.rollback();
             throw new Error(error);
         }
@@ -35,7 +43,7 @@ export class PaymentRepository {
     async setStatus(id: string, status: PaymentStatus) {
         try {
             return this.models.Payments.update({ status }, { where: { id } });
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
         }
     }
@@ -45,7 +53,7 @@ export class PaymentRepository {
         try {
             await this.models.Payments.update({ void_at: new Date() }, { where: { id }, transaction });
             await transaction.commit();
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
         }
     }

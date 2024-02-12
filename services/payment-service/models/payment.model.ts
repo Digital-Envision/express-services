@@ -1,6 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
 
-const definePaymentsModel = (sequelizeConnection) => {
+const definePaymentsModel = (sequelizeConnection: Sequelize) => {
     const Payments = sequelizeConnection.define('Payments', {
         id: {
             type: DataTypes.INTEGER,
@@ -20,29 +20,33 @@ const definePaymentsModel = (sequelizeConnection) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        transaction_id: {
+        transactionId: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
+            field: 'transaction_id',
         },
-        created_at: {
+        createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: Sequelize.fn('now'),
+            field: 'created_at',
         },
-        updated_at: {
+        updatedAt: {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: Sequelize.fn('now'),
+            field: 'updated_at',
         },
-        void_at: {
+        voidAt: {
             type: DataTypes.DATE,
+            field: 'void_at',
         }
     },
         {
             freezeTableName: true,
             tableName: 'payments',
-            paranoid: true,
+            paranoid: false,
         });
 
     return Payments;

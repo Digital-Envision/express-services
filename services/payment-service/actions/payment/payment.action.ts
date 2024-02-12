@@ -1,9 +1,7 @@
 import { PaymentRepository } from './../../repository/payment.repository';
 import { PaymentCreatePayload } from "../../types/payment.interface";
 import Stripe from 'stripe';
-import { envMode, serviceConfig } from '../../configs/config';
-
-const config = serviceConfig[envMode]
+import { serviceConfig } from '../../configs/config';
 
 export class PaymentActions {
     private paymentRepository: PaymentRepository;
@@ -11,7 +9,11 @@ export class PaymentActions {
 
     constructor() {
         this.paymentRepository = new PaymentRepository();
-        this.stripe = new Stripe(config.stripe.secretKey)
+        this.stripe = new Stripe(serviceConfig.stripe.secretKey || '')
+    }
+
+    async getPayments() {
+        return this.paymentRepository.getPayments();
     }
 
     async getPayment(id: string) {
@@ -32,7 +34,7 @@ export class PaymentActions {
                 payment,
                 detail: paymentIntent,
             };
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
         }
     }
@@ -40,7 +42,7 @@ export class PaymentActions {
     async voidPayment(id: string) {
         try {
             return this.paymentRepository.voidPayment(id);
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
         }
     }

@@ -1,24 +1,22 @@
-import { Sequelize } from 'sequelize';
-import { serviceConfig, envMode } from '../configs/config';
+import { Dialect, Sequelize } from 'sequelize';
+import { serviceConfig } from '../configs/config';
 
-const config = serviceConfig[envMode]
-
-const sequelize = new Sequelize(config.db.name,
-    config.db.user,
-    config.db.password,
+const sequelize = new Sequelize(serviceConfig.db.name,
+    serviceConfig.db.user,
+    serviceConfig.db.password,
     {
-        host: config.db.host,
-        port: config.db.port,
-        dialect: config.db.dialect ?? 'mysql',
+        host: serviceConfig.db.host,
+        port: serviceConfig.db.port,
+        dialect: serviceConfig.db.dialect as Dialect || 'mysql',
         dialectOptions: {
-            ssl: config.db.sslMode === 'true',
+            ssl: serviceConfig.db.sslMode === 'true',
             decimalNumbers: true,
         },
         pool: {
-            max: config.db.pool.max,
-            min: config.db.pool.min,
-            acquire: config.db.pool.acquire,
-            idle: config.db.pool.idle,
+            max: serviceConfig.db.pool.max,
+            min: serviceConfig.db.pool.min,
+            acquire: serviceConfig.db.pool.acquire,
+            idle: serviceConfig.db.pool.idle,
         },
     });
 
