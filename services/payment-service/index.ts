@@ -1,5 +1,5 @@
 import swaggerJSDoc, { Options } from "swagger-jsdoc";
-import router from './routes/index.route';
+import router from './actions/index.action';
 
 export default {
     initialize: (options: { database: Options, swaggerSpecOption?: swaggerJSDoc.Options }) => {

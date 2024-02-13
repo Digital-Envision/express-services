@@ -3,7 +3,7 @@ import { PaymentCreatePayload } from "../../types/payment.interface";
 import Stripe from 'stripe';
 import { serviceConfig } from '../../configs/config';
 
-export class PaymentActions {
+export class PaymentHandler {
     private paymentRepository: PaymentRepository;
     private stripe: Stripe;
 
