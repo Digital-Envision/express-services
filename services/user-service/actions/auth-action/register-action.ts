@@ -1,4 +1,5 @@
 import express, {Request, Response} from "express";
+import * as auth from '../../middleware/auth'
 
 const router = express.Router();
 
@@ -42,8 +43,7 @@ const router = express.Router();
  *               format: jwt
  *               example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwia
  */
-router.post("/", async (req: Request, res: Response) => {
-  res.status(200).send();
-});
+router.post('/', auth.createUserAuthMw);
+
 
 export default router;

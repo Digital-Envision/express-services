@@ -1,10 +1,10 @@
 // User.ts
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, CreationOptional } from 'sequelize';
 import sequelize from '../utils/sequelize';
 import BaseModel from './base-model';
 
 class User extends BaseModel<User> {
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare firstName: string;
   declare lastName: string;
 }

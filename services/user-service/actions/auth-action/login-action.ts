@@ -1,5 +1,7 @@
 import express, {Request, Response} from "express";
 import User from "../../models/user-model";
+import { loginMw } from "../../middleware/auth";
+import passport from "passport";
 
 const router = express.Router();
 
@@ -37,11 +39,10 @@ const router = express.Router();
  *               format: jwt
  *               example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwia
  */
-router.post("/", async(req: Request, res: Response) => {
-  console.log('post');
+// router.post("/", passport.authenticate('local', {
+//   successRedirect: '/'
+// }))
 
-  const user = await User.findOne();
-  res.status(200).json(user);
-});
+router.post("/", loginMw)
 
 export default router;

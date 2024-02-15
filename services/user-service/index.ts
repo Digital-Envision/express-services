@@ -1,9 +1,10 @@
-import express from 'express';
+import express, { Express } from 'express';
 import { Sequelize, Options } from 'sequelize';
 import action from "./actions";
 import swaggerJSDoc from 'swagger-jsdoc';
 import { Umzug, SequelizeStorage } from 'umzug';
 import sequelize from './utils/sequelize';
+import passportSetup from './utils/passport';
 import path from 'path';
 
 export default {
@@ -34,7 +35,11 @@ export default {
         }
       }
     }
-    
+    const app = express()
+
+    app.use(passportSetup.initialize())
+    app.use(passportSetup.session());
+
     const router = express.Router(); 
     router.use("/users/", action);
     return router;

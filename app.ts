@@ -3,11 +3,15 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import userService from './services/user-service';
 import dotenv from 'dotenv';
+import session from 'express-session';
 
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = 3001;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false}));
 
 const swwaggerSpecOption: swaggerJSDoc.Options = {
   definition: {
@@ -21,6 +25,13 @@ const swwaggerSpecOption: swaggerJSDoc.Options = {
   apis: []
 };
 
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: 'sesion secret',
+  })
+);
 app.use(userService.initialize({ swaggerSpecOption: swwaggerSpecOption }));
 
 const swaggerSpec = swaggerJSDoc(swwaggerSpecOption);

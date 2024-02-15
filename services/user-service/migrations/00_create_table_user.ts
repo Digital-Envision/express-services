@@ -5,7 +5,8 @@ async function up(params: {context: QueryInterface}) {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			primaryKey: true
+			primaryKey: true,
+			autoIncrement: true,
 		},
 		firstName: {
 			type: DataTypes.STRING,

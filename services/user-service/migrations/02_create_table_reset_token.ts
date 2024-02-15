@@ -1,33 +1,29 @@
 import { DataTypes, QueryInterface } from 'sequelize';
 
 async function up(params: {context: QueryInterface}) {
-	await params.context.createTable('user_auths', {
+	await params.context.createTable('reset_tokens', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		userId: {
+		authId: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
-    authType: {
-      type: DataTypes.INTEGER,
+    token: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
 		username: {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-    password: {
-			type: DataTypes.STRING,
+		expiresAt: {
+			type: DataTypes.DATE,
 			allowNull: false
 		},
-    profileData: {
-      type: DataTypes.JSON,
-      allowNull: true,
-    },
 		createdAt: {
 			type: DataTypes.DATE,
 			allowNull: false
@@ -38,12 +34,12 @@ async function up(params: {context: QueryInterface}) {
 		}
 	});
 
-  await params.context.addConstraint('user_auths', {
-    fields: ['userId'],
+  await params.context.addConstraint('reset_tokens', {
+    fields: ['authId'],
     type: 'foreign key',
-    name: 'fk_user_auths_userId',
+    name: 'fk_reset_tokens_authId',
     references: {
-      table: 'users',
+      table: 'user_auths',
       field: 'id',
     },
     onDelete: 'cascade',
@@ -52,8 +48,8 @@ async function up(params: {context: QueryInterface}) {
 }
 
 async function down(params: {context: QueryInterface}) {
-  await params.context.removeConstraint('user_auths', 'fk_user_auths_userId');
-	await params.context.dropTable('user_auths');
+  await params.context.removeConstraint('reset_tokens', 'fk_reset_tokens_authId');
+	await params.context.dropTable('reset_tokens');
 }
 
 module.exports = {
