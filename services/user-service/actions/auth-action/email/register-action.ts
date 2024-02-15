@@ -4,7 +4,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /users/auth/register:
+ * /users/auth/email/register:
  *   post:
  *     summary: User login
  *     consumes:

@@ -5,7 +5,8 @@ async function up(params: {context: QueryInterface}) {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			primaryKey: true
+			primaryKey: true,
+			autoIncrement: true,
 		},
 		userId: {
 			type: DataTypes.INTEGER,
@@ -17,11 +18,11 @@ async function up(params: {context: QueryInterface}) {
     },
 		username: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: false,
 		},
     password: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: true,
 		},
     profileData: {
       type: DataTypes.JSON,

@@ -10,6 +10,7 @@ const sequelize = new Sequelize({
   username: process.env.USER_SERVICE_DB_USERNAME as any,
   password: process.env.USER_SERVICE_DB_PASSWORD as any,
   database: process.env.USER_SERVICE_DB_DATABASE as any,
+  logging: console.log,
 });
 
 export default sequelize;
