@@ -21,6 +21,15 @@ const swwaggerSpecOption: swaggerJSDoc.Options = {
       version: '1.0.0',
       description: 'API documentation for Express TypeScript',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        }
+      }
+    }
   },
   apis: []
 };

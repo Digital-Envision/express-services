@@ -6,7 +6,8 @@ import BaseModel from './base-model';
 class User extends BaseModel<User> {
   declare id: CreationOptional<number>;
   declare firstName: string;
-  declare lastName: string;
+  declare lastName: CreationOptional<string>;
+  declare email: string;
 }
 
 User.init(
@@ -22,7 +23,17 @@ User.init(
     },
     lastName: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    email: {
+      type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: {
+          msg: "Must be a valid email address",
+        }
+      }
     },
   },
   {

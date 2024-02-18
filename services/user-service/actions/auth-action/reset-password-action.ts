@@ -5,9 +5,15 @@ const router = express.Router();
 
 /**
  * @swagger
- * /users/auth/forgot-password:
+ * /users/auth/reset-password:
  *   post:
- *     summary: forgot password
+ *     summary: reset password
+ *   parameters:
+*      - in: path
+*        name: token
+*        type: string
+*        required: true
+*         description: reset-token from forget-password.
  *     requestBody:
  *         name: userObject
  *         description: User's Object
@@ -17,28 +23,26 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 email:
+ *                 password:
  *                   type: string
- *                   format: email
- *                   example: user@email.com
+ *                   format: password
+ *                   example: 123456
+ *                 confirmPassword:
+ *                   type: string
+ *                   format: password
+ *                   example: 123456
  *     responses:
  *       200:
  *         description: A successful response
  *         schema:
  *           type: object
  *           properties:
- *             resetToken:
- *               type: string
- *               format: jwt
- *               example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwia
  */
 
 router.post(
-  "/",
-  reset.getUserByEmailMw,
-  reset.removeDuplicateTokenMw,
-  reset.createResetTokenMw,
-  reset.sendEmailMw
+  "/:token",
+  reset.verifyTokenMw,
+  reset.updateUserPasswordMw
 );
 
 export default router;

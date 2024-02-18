@@ -10,24 +10,23 @@ const router = express.Router();
  * /users/auth/login:
  *   post:
  *     summary: User login
- *     consumes:
- *       - application/json
- *     parameters:
- *       - in: body
- *         name: userCredentials
- *         description: User's login credentials
+ *     requestBody:
+ *         name: userObject
+ *         description: User's Object
  *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             email:
- *               type: string
- *               format: email
- *               example: user@email.com
- *             password:
- *               type: string
- *               format: password
- *               example: 123456
+ *         content:
+ *           application/json: 
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 email:
+ *                   type: string
+ *                   format: email
+ *                   example: user@email.com
+ *                 password:
+ *                   type: string
+ *                   format: password
+ *                   example: 123456
  *     responses:
  *       200:
  *         description: A successful response
@@ -39,9 +38,6 @@ const router = express.Router();
  *               format: jwt
  *               example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwia
  */
-// router.post("/", passport.authenticate('local', {
-//   successRedirect: '/'
-// }))
 
 router.post("/", loginMw)
 

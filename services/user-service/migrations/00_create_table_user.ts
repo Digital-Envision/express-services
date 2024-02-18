@@ -14,7 +14,12 @@ async function up(params: {context: QueryInterface}) {
 		},
 		lastName: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: true
+		},
+		email: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: true
 		},
 		createdAt: {
 			type: DataTypes.DATE,

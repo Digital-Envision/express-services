@@ -6,14 +6,14 @@ import ApiError from '../utils/apiError';
 import User from "../models/user-model";
 import UserAuth from "../models/user-auth-model";
 import ResetToken from "../models/reset-token-model";
+import { IUser, IUserAuth } from "../utils/types";
 
 export const getUserByEmailMw = asyncMw(async (req, res, next) => {
-  const auth: any = await UserAuth.findOne({where: { username: req.body.email }});
-  if (!auth) throw new ApiError(404, 'User not found or not registered by email');
-  const user: any = await User.findByPk(auth.userId);
+  req.auth = await UserAuth.findOne({where: { email: req.body.email }});
+  if (!req.auth) throw new ApiError(404, 'User not found or not registered by email');
+  const user: IUser | null = await User.findByPk(req.auth.userId);
 
-  req.auth = auth;
-  req.user = user;
+  if (user) req.user = user;
 
   return next();
 });
@@ -41,10 +41,11 @@ export const createResetTokenMw = asyncMw(async (req: any, res, next) => {
 export const sendEmailMw = asyncMw(async (req: any, res) => {
   const { resetToken, auth, user } = req;
 
-  const link = `${process.env.ADMIN_WEB_BASE_URL}/auth/reset-password/${resetToken.token}`;
+  // 👉 link to fe reset password form
+  const link = `${process.env.ADMIN_WEB_BASE_URL}/users/auth/reset-password/${resetToken.token}`;
 
   await sendEmail(
-    auth.username,
+    auth.email,
     'Reset your password',
     { name: `${user.firstName} ${user.lastName}`, link },
     '../template/resetPassword.handlebars'
@@ -76,7 +77,7 @@ export const updateUserPasswordMw = asyncMw(async (req, res) => {
     throw new ApiError(400, 'password and confirmPassword is not same');
 
   // const data = await repository.user.resourceToModel({ password });
-  await UserAuth.update({ password }, {where: { id: req.resetToken.authId }});
+  await UserAuth.update({ password }, {where: { id: req.resetToken.authId }, individualHooks: true });
 
   await ResetToken.destroy({where: { id: req.resetToken.id }});
 

@@ -1,4 +1,3 @@
-// User.ts
 import { DataTypes, Model, CreationOptional } from 'sequelize';
 import sequelize from '../utils/sequelize';
 import BaseModel from './base-model';
@@ -9,7 +8,8 @@ class User extends BaseModel<User> {
   declare userId: number;
   declare authType: number;
   declare username: string;
-  declare password: string;
+  declare email: string;
+  declare password: CreationOptional<string>;
   declare profileData: any;
 }
 
@@ -32,9 +32,19 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: {
+          msg: "Must be a valid email address",
+        }
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     profileData: {
       type: DataTypes.JSON,
@@ -47,8 +57,6 @@ User.init(
     tableName: 'user_auths',
     hooks: {
       beforeCreate: async (user, options) => {
-        // hash password here
-        throw { errmsg: 'ini error' };
         const encryptedPassword = await hashText(user.password);
         user.password = encryptedPassword;
       },
@@ -57,7 +65,7 @@ User.init(
           const encryptedPassword = await hashText(user.password);
           user.password = encryptedPassword;
         }
-      }
+      },
     }
   }
 );
