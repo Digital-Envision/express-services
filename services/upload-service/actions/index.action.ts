@@ -3,6 +3,6 @@ import UploadRoute from './upload/index.action';
 
 const router = express.Router();
 
-router.use("/upload", UploadRoute);
+router.use("/", UploadRoute);
 
 export default router;

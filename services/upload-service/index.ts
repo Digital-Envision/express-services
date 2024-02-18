@@ -1,5 +1,6 @@
 import express from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
+import action from './actions/index.action';
 
 export default {
     initialize: (options: { swaggerSpecOption?: swaggerJSDoc.Options }) => {
@@ -15,6 +16,7 @@ export default {
         }
 
         const router = express.Router();
+        router.use('/upload', action);
         return router;
     }
 }

@@ -40,7 +40,7 @@ const upload = multer({ storage: multer.memoryStorage() });
  */
 router.post('/', upload.single('file'), async (req: Request, res: Response) => {
     try {
-        const { bucket } = req.body;
+        const { provider } = req.body;
 
         if (!req.file) {
             res.status(400).json({ error: 'File not found' });
@@ -50,7 +50,7 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
         const file = req.file;
         const fileKey = file.originalname;
 
-        const uploadedFile = await uploadHandler.uploadFile(bucket, fileKey, file.buffer, 'aws');
+        const uploadedFile = await uploadHandler.uploadFile(fileKey, file.buffer, provider);
         res.json(uploadedFile);
     } catch (error: any) {
         res.status(500).json({ error: error.message });
@@ -78,7 +78,7 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
  *     tags:
  *       - Upload Service
  */
-router.delete('/remove-file', async (req: Request, res: Response) => {
+router.delete('/remove', async (req: Request, res: Response) => {
     try {
         const { fileKey, bucket, provider } = req.body;
 

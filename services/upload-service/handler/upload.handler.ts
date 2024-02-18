@@ -20,11 +20,11 @@ export class UploadHandler {
         });
     }
 
-    async uploadFile(bucketName: string, fileKey: string, file: Buffer, provider: string): Promise<FileUploadDetails> {
+    async uploadFile(fileKey: string, file: Buffer, provider: string): Promise<FileUploadDetails> {
         if (provider === 'aws') {
-            return this.uploadToAws(bucketName, fileKey, file);
+            return this.uploadToAws(serviceConfig.aws.bucketName, fileKey, file);
         } else if (provider === 'gcs') {
-            return this.uploadToGcs(bucketName, fileKey, file);
+            return this.uploadToGcs(serviceConfig.aws.bucketName, fileKey, file);
         } else {
             throw new Error('Invalid payload provider');
         }
