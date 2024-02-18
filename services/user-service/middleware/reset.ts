@@ -44,12 +44,12 @@ export const sendEmailMw = asyncMw(async (req: any, res) => {
   // 👉 link to fe reset password form
   const link = `${process.env.ADMIN_WEB_BASE_URL}/users/auth/reset-password/${resetToken.token}`;
 
-  await sendEmail(
-    auth.email,
-    'Reset your password',
-    { name: `${user.firstName} ${user.lastName}`, link },
-    '../template/resetPassword.handlebars'
-  );
+  // await sendEmail(
+  //   auth.email,
+  //   'Reset your password',
+  //   { name: `${user.firstName} ${user.lastName}`, link },
+  //   '../template/resetPassword.handlebars'
+  // );
 
   return res.status(200).json({ resetToken: resetToken.token });
 });
@@ -76,7 +76,6 @@ export const updateUserPasswordMw = asyncMw(async (req, res) => {
   if (password !== confirmPassword)
     throw new ApiError(400, 'password and confirmPassword is not same');
 
-  // const data = await repository.user.resourceToModel({ password });
   await UserAuth.update({ password }, {where: { id: req.resetToken.authId }, individualHooks: true });
 
   await ResetToken.destroy({where: { id: req.resetToken.id }});
