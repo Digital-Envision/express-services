@@ -2,12 +2,16 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import userService from './services/user-service';
-import { JSDoc } from 'typescript';
+import dotenv from 'dotenv';
+import session from 'express-session';
+
+dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false}));
 
 const swwaggerSpecOption: swaggerJSDoc.Options = {
   definition: {
@@ -17,21 +21,27 @@ const swwaggerSpecOption: swaggerJSDoc.Options = {
       version: '1.0.0',
       description: 'API documentation for Express TypeScript',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        }
+      }
+    }
   },
   apis: []
 };
 
-app.use(userService.initialize({
-  database: {
-    host: "localhost",
-    port: 3306,
-    username: "root",
-    password: "123",
-    database: "user_service",
-    dialect: "mysql",
-  },
-  swaggerSpecOption: swwaggerSpecOption
-}));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: 'sesion secret',
+  })
+);
+app.use(userService.initialize({ swaggerSpecOption: swwaggerSpecOption }));
 
 const swaggerSpec = swaggerJSDoc(swwaggerSpecOption);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

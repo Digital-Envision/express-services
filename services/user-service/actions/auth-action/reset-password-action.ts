@@ -1,13 +1,19 @@
 import express, {Request, Response} from "express";
-import * as auth from '../../middleware/auth'
+import * as reset from '../../middleware/reset'
 
 const router = express.Router();
 
 /**
  * @swagger
- * /users/auth/register:
+ * /users/auth/reset-password:
  *   post:
- *     summary: creates new user
+ *     summary: reset password
+ *   parameters:
+*      - in: path
+*        name: token
+*        type: string
+*        required: true
+*         description: reset-token from forget-password.
  *     requestBody:
  *         name: userObject
  *         description: User's Object
@@ -17,28 +23,26 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 username:
- *                   type: string
- *                   example: John Doe Account
- *                 email:
- *                   type: string
- *                   format: email
- *                   example: user@email.com
  *                 password:
  *                   type: string
  *                   format: password
  *                   example: 123456
- *                 firstName:
+ *                 confirmPassword:
  *                   type: string
- *                   example: John
- *                 lastName:
- *                   type: string
- *                   example: Doe
+ *                   format: password
+ *                   example: 123456
  *     responses:
- *       201:
+ *       200:
  *         description: A successful response
+ *         schema:
+ *           type: object
+ *           properties:
  */
-router.post('/', auth.createUserAuthMw);
 
+router.post(
+  "/:token",
+  reset.verifyTokenMw,
+  reset.updateUserPasswordMw
+);
 
 export default router;

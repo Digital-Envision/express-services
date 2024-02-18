@@ -1,14 +1,13 @@
 // User.ts
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, CreationOptional } from 'sequelize';
 import sequelize from '../utils/sequelize';
 import BaseModel from './base-model';
 
 class User extends BaseModel<User> {
-  declare id: number;
-  declare email: string;
-  declare password: string;
+  declare id: CreationOptional<number>;
   declare firstName: string;
-  declare lastName: string;
+  declare lastName: CreationOptional<string>;
+  declare email: string;
 }
 
 User.init(
@@ -18,21 +17,23 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     lastName: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    email: {
+      type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: {
+          msg: "Must be a valid email address",
+        }
+      }
     },
   },
   {
