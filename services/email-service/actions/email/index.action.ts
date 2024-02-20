@@ -1,8 +1,12 @@
 import { EmailHandler } from './../../handler/email.handler';
 import express, { Request, Response } from "express";
+import multer from "multer";
 
 const router = express.Router();
 router.use(express.json());
+
+// Set up multer for handling file uploads
+const upload = multer({ dest: "uploads/" });
 
 const emailHandler = new EmailHandler();
 
@@ -15,7 +19,7 @@ const emailHandler = new EmailHandler();
  *       - Email
  *     requestBody:
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -27,6 +31,9 @@ const emailHandler = new EmailHandler();
  *                 type: string
  *               provider:
  *                 type: string
+ *               attachment:
+ *                 type: string
+ *                 format: binary
  *             required:
  *               - emailTo
  *               - subject
@@ -40,17 +47,19 @@ const emailHandler = new EmailHandler();
  *       500:
  *         description: Internal server error
  */
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', upload.single("attachment"), async (req: Request, res: Response) => {
     try {
         const { emailTo, subject, emailBody, provider } = req.body;
+        const attachment = req.file; // Retrieve the uploaded file
 
         if (!emailTo) {
             res.status(400).json({
                 message: 'Email destination is required'
             });
+            return;
         }
 
-        await emailHandler.sendEmail(provider, emailTo, subject, emailBody);
+        await emailHandler.sendEmail(provider, emailTo, subject, emailBody, attachment);
 
         res.status(200).json({
             message: 'Email sent successfully'
