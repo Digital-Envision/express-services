@@ -1,11 +1,15 @@
 <h2 id="table">Contribution Guidelines</h2>
+
 When contributing to `Digital-Envision/express-services`, whether on Github or in other community spaces:
+
 - Be respectful, civil, and open-minded.
 - Before opening a new pull request, try searching through the [issue tracker](https://github.com/Digital-Envision/express-services/issues) for known issues or fixes.
 - If you want to make code changes based on your personal opinion(s), make sure you open an issue first describing the changes you want to make, and open a pull request only when your suggestions get approved by maintainers.
 
 <h2 id="contribute">How to Contribute</h2>
+
 ### Prerequisites
+
 In order to not waste your time implementing a change that has already been declined, or is generally not needed, start by [opening an issue](https://github.com/Digital-Envision/express-services/issues/new/choose) describing the problem you would like to solve.
 
 ### Setup your environment locally
