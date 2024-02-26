@@ -1,4 +1,4 @@
-import { FileUploadDetails } from '../types/upload.interface';
+import { FileObject, FileUploadDetails } from '../types/upload.interface';
 import AWS from 'aws-sdk';
 import { serviceConfig } from '../configs/config';
 import { Storage } from '@google-cloud/storage';
@@ -28,6 +28,15 @@ export class UploadHandler {
         } else {
             throw new Error('Invalid payload provider');
         }
+    }
+
+    async uploadFiles(files: FileObject[]) {
+        const uploadPromises = files.map(async (file) => {
+            const { fileKey, file: fileBuffer, provider } = file;
+            return this.uploadFile(fileKey, fileBuffer, provider);
+        });
+
+        return Promise.all(uploadPromises);
     }
 
     private async uploadToAws(bucketName: string, fileKey: string, file: Buffer): Promise<FileUploadDetails> {

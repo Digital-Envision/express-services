@@ -3,3 +3,9 @@ export interface FileUploadDetails {
     key: string;
     location: string;
 }
+
+export interface FileObject {
+    fileKey: string;
+    file: Buffer;
+    provider: string;
+}

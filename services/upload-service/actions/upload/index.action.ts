@@ -59,6 +59,88 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
 
 /**
  * @swagger
+ * /bulk:
+ *   post:
+ *     summary: Upload files in bulk
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               files:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *               provider:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successful upload
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 uploadResults:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       // Define your upload result properties here
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
+router.post('/bulk', upload.array('files'), async (req, res) => {
+    try {
+        if (!req.files || req.files.length === 0) {
+            // Handle the case when no files are uploaded
+            return res.status(400).json({ error: 'No files uploaded' });
+        }
+
+        const files = req.files;
+        const provider = req.body.provider; // Assuming the provider is sent in the request body
+
+        if (!Array.isArray(files)) {
+            return res.status(400).json({ error: 'Invalid files array' });
+        }
+
+        const uploadPromises = files.map(async (file) => {
+            const fileKey = file.originalname;
+            const fileBuffer = file.buffer;
+
+            return uploadHandler.uploadFile(fileKey, fileBuffer, provider);
+        });
+
+        const uploadResults = await Promise.all(uploadPromises);
+
+        res.json({ uploadResults });
+    } catch (error) {
+        console.error('Error uploading files:', error);
+        res.status(500).json({ error: 'Failed to upload files' });
+    }
+});
+
+/**
+ * @swagger
  * /upload/remove-file:
  *   delete:
  *     summary: Remove a file from AWS S3.
