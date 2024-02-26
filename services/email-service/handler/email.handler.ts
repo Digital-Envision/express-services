@@ -2,20 +2,45 @@ import fs from 'fs';
 import FormData from 'form-data';
 import Mailgun from 'mailgun.js';
 import { Resend } from 'resend';
-import { MailtrapClient } from "mailtrap"
+import { MailtrapClient, MailtrapClientConfig } from "mailtrap"
 import { serviceConfig } from '../configs/config';
+import { IMailgunClient } from 'mailgun.js/Interfaces';
 
-const mailgunSdk = new Mailgun(FormData);
 const mailtrapSdk = new MailtrapClient({ token: serviceConfig.mailtrap.apiKey });
 const resendSdk = new Resend(serviceConfig.resend.apiKey);
 
 export class EmailHandler {
-    private mailgun: any;
+    private mailgun: Mailgun | null;
+    private mailgunClient: IMailgunClient | null;
+    private mailtrap: MailtrapClient | null;
+    private resend: Resend | null;
 
     constructor() {
-        this.mailgun = mailgunSdk.client({ username: 'api', key: serviceConfig.mailgun.apiKey });
+        this.mailgun = null;
+        this.mailgunClient = null;
+        this.mailtrap = null;
+        this.resend = null;
     }
+
+    private initializeInstance(provider: string): void {
+        if (provider === "mailgun") {
+            if (!this.mailgun) {
+                this.mailgun = new Mailgun(FormData);
+                this.mailgunClient = this.mailgun.client({ username: 'api', key: serviceConfig.mailgun.apiKey });
+            }
+        } else if (provider === "mailtrap") {
+            if (!this.mailtrap) {
+                this.mailtrap = new MailtrapClient({ token: serviceConfig.mailtrap.apiKey });
+            }
+        } else if (provider === "resend") {
+            if (!this.resend) {
+                this.resend = new Resend(serviceConfig.resend.apiKey);
+            }
+        }
+    }
+
     async sendEmail(provider: string, emailTo: string, subject: string, emailBody: string, attachment?: Express.Multer.File) {
+        this.initializeInstance(provider);
         switch (provider) {
             case "mailgun":
                 return await this.sendMailgunEmail(emailTo, subject, emailBody, attachment);
@@ -48,12 +73,16 @@ export class EmailHandler {
 
     async sendMailgunEmail(emailTo: string, subject: string, emailBody: string, attachment?: Express.Multer.File) {
         try {
-            await this.mailgun.create(serviceConfig.mailgun.domain, {
+            await this.mailgunClient?.messages.create(serviceConfig.mailgun.domain, {
                 from: serviceConfig.default.emailFrom,
                 to: [emailTo],
                 subject: subject,
                 text: emailBody,
-                attachment,
+                attachment: {
+                    filename: attachment?.originalname ?? '',
+                    path: attachment?.path,
+                    data: attachment?.buffer ?? '',
+                },
             });
         } catch (error: any) {
             throw new Error(error.message);

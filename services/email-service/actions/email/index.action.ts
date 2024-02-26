@@ -12,7 +12,7 @@ const emailHandler = new EmailHandler();
 
 /**
  * @swagger
- * /api/email:
+ * /api/email/send:
  *   post:
  *     summary: Send an email
  *     tags:
@@ -47,7 +47,7 @@ const emailHandler = new EmailHandler();
  *       500:
  *         description: Internal server error
  */
-router.post('/', upload.single("attachment"), async (req: Request, res: Response) => {
+router.post('/send', upload.single("attachment"), async (req: Request, res: Response) => {
     try {
         const { emailTo, subject, emailBody, provider } = req.body;
         const attachment = req.file; // Retrieve the uploaded file
