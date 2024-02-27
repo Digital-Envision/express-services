@@ -66,3 +66,7 @@ Extra:
 "seed:revert": "pnpm run seed --action revert",
 "seed:latest": "pnpm run seed --action latest",
 ```
+
+## Authors
+
+- Muhammad Firdaus Sati (https://github.com/krsbx)

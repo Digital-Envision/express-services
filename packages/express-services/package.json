@@ -1,0 +1,30 @@
+{
+  "name": "@digital-envision/express-services",
+  "version": "1.0.0",
+  "description": "@digital-envision/express-services downloader",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "express-services": "dist/bin/index.js"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc --project tsconfig.build.json",
+    "check-types": "tsc --project tsconfig.json"
+  },
+  "keywords": [],
+  "author": "Muhammad Firdaus Sati",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "rimraf": "^5.0.5",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@rushstack/ts-command-line": "^4.17.2"
+  },
+  "engines": {
+    "node": ">=18.15.0"
+  }
+}
