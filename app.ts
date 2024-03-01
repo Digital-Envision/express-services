@@ -2,14 +2,12 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import userService from './services/user-service';
-import { JSDoc } from 'typescript';
+import paymentService from './services/payment-service';
 
 const app = express();
 const port = 3000;
 
-
-
-const swwaggerSpecOption: swaggerJSDoc.Options = {
+const swaggerSpecOption: swaggerJSDoc.Options = {
   definition: {
     openapi: '3.0.0',
     info: {
@@ -30,10 +28,22 @@ app.use(userService.initialize({
     database: "user_service",
     dialect: "mysql",
   },
-  swaggerSpecOption: swwaggerSpecOption
+  swaggerSpecOption
 }));
 
-const swaggerSpec = swaggerJSDoc(swwaggerSpecOption);
+app.use(paymentService.initialize({
+  database: {
+    host: "localhost",
+    port: 3306,
+    username: "root",
+    password: "123",
+    database: "payments",
+    dialect: "mysql",
+  },
+  swaggerSpecOption
+}))
+
+const swaggerSpec = swaggerJSDoc(swaggerSpecOption);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res) => {
