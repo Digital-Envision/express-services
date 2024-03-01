@@ -1,12 +1,10 @@
 import express from "express";
-import loginAction from "./login-action";
-import registerAction from "./register-action";
-
-
+import emailAction from "./email";
+import facebookAction from "./facebook";
 
 const router = express.Router();
 
-router.use("/login", loginAction);
-router.use("/register", registerAction);
+router.use('/email', emailAction);
+router.use('/facebook', facebookAction);
 
 export default router;

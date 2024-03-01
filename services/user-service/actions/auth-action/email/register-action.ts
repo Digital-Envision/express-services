@@ -1,11 +1,10 @@
 import express, {Request, Response} from "express";
-import User from "../../models/user-model";
 
 const router = express.Router();
 
 /**
  * @swagger
- * /users/auth/login:
+ * /users/auth/email/register:
  *   post:
  *     summary: User login
  *     consumes:
@@ -26,6 +25,12 @@ const router = express.Router();
  *               type: string
  *               format: password
  *               example: 123456
+ *             firstName:
+ *               type: string
+ *               example: John
+ *             lastName:
+ *               type: string
+ *               example: Doe
  *     responses:
  *       200:
  *         description: A successful response
@@ -37,9 +42,8 @@ const router = express.Router();
  *               format: jwt
  *               example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwia
  */
-router.post("/", async(req: Request, res: Response) => {
-  const user = await User.findOne();
-  res.status(200).json(user);
+router.post("/", async (req: Request, res: Response) => {
+  res.status(200).send();
 });
 
 export default router;

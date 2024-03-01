@@ -9,12 +9,23 @@
   "author": "Ahmad Saifuddin Azhar",
   "license": "ISC",
   "dependencies": {
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.1",
+    "passport": "^0.7.0",
+    "passport-facebook": "^3.0.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "sequelize": "^6.35.2",
     "umzug": "^3.6.1"
   },
   "devDependencies": {
+    "@types/express-session": "^1.17.10",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.11.16",
+    "@types/passport-facebook": "^3.0.3",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
     "@types/sequelize": "^4.28.20"
   }
 }

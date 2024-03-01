@@ -4,11 +4,9 @@ import sequelize from '../utils/sequelize';
 import BaseModel from './base-model';
 
 class User extends BaseModel<User> {
-  declare id: number;
-  declare email: string;
-  declare password: string;
+  declare id?: number;
   declare firstName: string;
-  declare lastName: string;
+  declare lastName?: string | null | undefined;
 }
 
 User.init(
@@ -18,21 +16,13 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

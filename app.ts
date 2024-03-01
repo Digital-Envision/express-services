@@ -2,12 +2,13 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import userService from './services/user-service';
-import { JSDoc } from 'typescript';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 const app = express();
 const port = 3000;
-
-
 
 const swwaggerSpecOption: swaggerJSDoc.Options = {
   definition: {
@@ -21,17 +22,7 @@ const swwaggerSpecOption: swaggerJSDoc.Options = {
   apis: []
 };
 
-app.use(userService.initialize({
-  database: {
-    host: "localhost",
-    port: 3306,
-    username: "root",
-    password: "123",
-    database: "user_service",
-    dialect: "mysql",
-  },
-  swaggerSpecOption: swwaggerSpecOption
-}));
+app.use(userService.initialize({ swaggerSpecOption: swwaggerSpecOption }));
 
 const swaggerSpec = swaggerJSDoc(swwaggerSpecOption);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
