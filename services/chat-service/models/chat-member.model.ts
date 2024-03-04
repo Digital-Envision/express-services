@@ -3,7 +3,7 @@ import BaseModel from './base-model';
 import { sequelize } from '../sequelize/sequelize';
 import type { Database } from '.';
 import type Chat from './chat.model';
-import { TABLE_NAME } from '../utils/constant';
+import { ChatRole, TABLE_NAME } from '../utils/constant';
 
 // eslint-disable-next-line no-use-before-define
 class ChatMember extends BaseModel<ChatMember> {
@@ -12,7 +12,7 @@ class ChatMember extends BaseModel<ChatMember> {
   declare userId: string;
   // Can be 'admin' or 'member'
   //  Better to use an enum in here
-  declare role: string;
+  declare role: ChatRole;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 

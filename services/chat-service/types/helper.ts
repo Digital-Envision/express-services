@@ -6,3 +6,6 @@ export type ConstantToPascalCase<T extends string> =
     : T extends `${infer A}${infer B}`
       ? `${Uppercase<A>}${Lowercase<B>}`
       : T;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Random = any;

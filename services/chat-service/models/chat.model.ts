@@ -1,10 +1,18 @@
-import Sequelize, { CreationOptional, NonAttribute } from 'sequelize';
-import BaseModel from './base-model';
+import Sequelize, {
+  CreationOptional,
+  NonAttribute,
+  FindAndCountOptions,
+  InferAttributes,
+  InferCreationAttributes,
+  Attributes,
+} from 'sequelize';
+import BaseModel, { UnknownModel } from './base-model';
 import { sequelize } from '../sequelize/sequelize';
 import type { Database } from '.';
 import type ChatMember from './chat-member.model';
 import type ChatMessage from './chat-message.model';
-import { TABLE_NAME } from '../utils/constant';
+import { ChatType, TABLE_NAME } from '../utils/constant';
+import { Random } from '../types/helper';
 
 // eslint-disable-next-line no-use-before-define
 class Chat extends BaseModel<Chat> {
@@ -14,7 +22,7 @@ class Chat extends BaseModel<Chat> {
   declare description: string | null;
   // Can be 'private' or 'group'
   //  Better to use an enum in here
-  declare type: string;
+  declare type: ChatType;
   declare metadata: CreationOptional<Record<string, unknown>>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
@@ -33,6 +41,21 @@ class Chat extends BaseModel<Chat> {
       foreignKey: 'chatId',
       as: 'messages',
     });
+  }
+
+  public static findCountAll<U extends Chat>(
+    options: FindAndCountOptions<Attributes<U>>,
+    filterQueryParams?: Record<Random, Random>,
+    query?: Record<Random, Random>
+  ): Promise<{
+    rows: BaseModel<
+      UnknownModel,
+      InferAttributes<UnknownModel, { omit: never }>,
+      InferCreationAttributes<UnknownModel, { omit: never }>
+    >[];
+    count: number;
+  }> {
+    return super.findCountAll(options, filterQueryParams, query) as never;
   }
 }
 
