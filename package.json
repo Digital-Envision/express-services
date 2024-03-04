@@ -40,7 +40,7 @@
     "prettier": "^3.2.4"
   },
   "lint-staged": {
-    "services/**/src/**/*.{ts,tsx}": [
+    "services/**/*.{ts,tsx}": [
       "prettier --write",
       "eslint --fix"
     ],
